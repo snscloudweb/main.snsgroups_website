@@ -1,0 +1,38 @@
+
+# Protect .env and sensitive files on Hostinger
+<FilesMatch "^\.env">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+RewriteEngine On
+
+# Redirect index.html to the homepage
+RewriteRule ^index\.html$ https://main.snsgroups.com/ [R=301,L]
+
+RewriteEngine On
+
+# Group A: moved pages (301 permanent redirect)
+RedirectMatch 301 ^/Enquiry/?$            https://main.snsgroups.com/enquiry/
+RedirectMatch 301 ^/career/?$             https://main.snsgroups.com/internship-jobs/
+RedirectMatch 301 ^/Sprinto-intern/?$     https://main.snsgroups.com/internship-jobs/
+RedirectMatch 301 ^/football-tournament-2026/?$ https://main.snsgroups.com/newsletter/
+
+# Old internship URLs from the earlier report
+RedirectMatch 301 ^/company-intern/?$     https://main.snsgroups.com/internship-jobs/
+RedirectMatch 301 ^/internshipNextPage/?$ https://main.snsgroups.com/internship-jobs/
+RedirectMatch 301 ^/internship-jobs/?$    https://main.snsgroups.com/placement-internships/
+RedirectMatch 301 ^/company-intern/?$     https://main.snsgroups.com/placement-internships/
+RedirectMatch 301 ^/internshipNextPage/?$ https://main.snsgroups.com/placement-internships/
+RedirectMatch 301 ^/Sprinto-intern/?$     https://main.snsgroups.com/placement-internships/
+RedirectMatch 301 ^/career/?$             https://main.snsgroups.com/placement-internships/
+
+RedirectMatch 410 ^/internship-jobs/?$
+RedirectMatch 410 ^/company-intern/?$
+RedirectMatch 410 ^/internshipNextPage/?$
+RedirectMatch 410 ^/Sprinto-intern/?$
+
+
+# Group B: removed for good (410 Gone)
+RedirectMatch 410 ^/close/?$
+RedirectMatch 410 ^/snsinstitutionslandingpagedesign22/?$

@@ -1,0 +1,67 @@
+# ==========================================
+# SNS GROUPS - SECURITY AND SEO
+# Updated 2026-11-17 (v2)
+# ==========================================
+
+# Protect environment files
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>
+
+# Protect sensitive Apache files
+<FilesMatch "^(\.htaccess|\.htpasswd)$">
+    Require all denied
+</FilesMatch>
+
+# Block source code, backups, notes and dev files left in the web root
+# (llms.txt and robots.txt stay public)
+<FilesMatch "(\.(py|pyc|php~|zip|tar|gz|bak|sql|log)$|^\.DS_Store$|^README\.md$|^htaccess\.txt$|^_brainfest_reg\.txt$|^index\.backup-.*\.html$|^indexV.*\.html$|^index[0-9]+\.html$|^_academy\.html$|^index \(main\.snsgroups\)\.html$)">
+    Require all denied
+</FilesMatch>
+RedirectMatch 404 ^/(\.vscode|__pycache__|\.rule1|_public_html|mains\.snsgroups)(/|$)
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Serve the llms.txt summary to AI agents that ask for Markdown
+RewriteCond %{HTTP_ACCEPT} text/markdown
+RewriteRule ^$ /llms.txt [T=text/markdown,L]
+
+# Redirect index.html to canonical homepage
+RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
+RewriteRule ^index\.html$ https://main.snsgroups.com/ [R=301,L]
+
+# ==========================================
+# REMOVED PAGES - 410 GONE
+# ==========================================
+RewriteRule ^internship-jobs/?$    - [G,L]
+RewriteRule ^company-intern/?$     - [G,L]
+RewriteRule ^internshipNextPage/?$ - [G,L]
+RewriteRule ^Sprinto-intern/?$     - [G,L]
+
+# ==========================================
+# AI-READABLE SUMMARY: point agents to llms.txt
+# ==========================================
+<IfModule mod_headers.c>
+  <Files "index.html">
+    Header add Link "</llms.txt>; rel=\"alternate\"; type=\"text/markdown\""
+  </Files>
+</IfModule>
+
+# ==========================================
+# COMPRESSION AND CACHING
+# ==========================================
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+# Cache /assets/ files for a year (the ?v= number in index.html changes when they change)
+<IfModule mod_headers.c>
+  <FilesMatch "^site\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# ==========================================
+# END
+# ==========================================

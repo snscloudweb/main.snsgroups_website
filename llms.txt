@@ -1,0 +1,53 @@
+# SNS Institutions
+
+> SNS Institutions is a group of nine educational institutions in Coimbatore, Tamil Nadu, India, run by Sri SNS Charitable Trust since 1997. It offers kindergarten to PhD across engineering, arts and science, management, pharmacy, nursing, physiotherapy, allied health sciences and teacher education, using a Design Thinking and AI-based learning model.
+
+SNS Institutions is the education arm of SNS Groups (https://www.snsgroups.com/).
+
+## Key facts
+- Founded: 1997, by Sri SNS Charitable Trust.
+- Leadership: Dr. S.N. Subbramanian (Founder Chairman), Dr. S. Rajalakshmi (Chairman / Correspondent), Nalin SNS (Technical Director).
+- Location: Saravanampatti area, Coimbatore, Tamil Nadu, along Thudiyalur - Saravanampatti Road and Sathy Main Road (NH-209).
+- Scale: 9 institutions, 16,000+ students, 40,000+ alumni.
+- Placements across SNS Institutions: 3,350+ students placed, 555+ recruiters, highest package ₹53 LPA.
+- Placements at SNS College of Technology, 2025 season: 96% placement rate, median package ₹7.8 LPA, 1,438+ students placed. Source: https://iipc.snsgroups.com/
+- Research across the group: 825+ patents filed, 3,100+ research papers, 150+ startups incubated, ₹27 Cr+ in funded projects, 600+ industry MoUs.
+- Professional certifications completed by students: 10,807+.
+- Frameworks: 3P Culture (Purpose, Process, People) and 3C Competency Circle (Attitude, Technical Skill, Logical and Business Skill).
+- Admissions helpline: +91 90036 55855. WhatsApp: +91 95664 23456. Email: info@snsgroups.com
+
+## Institutions
+- [SNS Academy](https://snsacademy.org/): CBSE school, Pre-KG to Grade XII.
+- [SNS College of Technology](https://snsct.org/): autonomous engineering college, Anna University, NAAC A++, TNEA code 2726.
+- [Dr. SNS Rajalakshmi College of Arts and Science](https://drsnsrcas.ac.in/): autonomous, Bharathiar University.
+- [SNS College of Pharmacy and Health Sciences](https://snscphs.org/): The Tamil Nadu Dr. M.G.R. Medical University.
+- [SNS College of Nursing](https://snscnursing.org/): The Tamil Nadu Dr. M.G.R. Medical University, code 879.
+- [SNS College of Physiotherapy](https://snscphysio.org/): The Tamil Nadu Dr. M.G.R. Medical University, code 864.
+- [SNS College of Allied Health Science](https://snscahs.org/): The Tamil Nadu Dr. M.G.R. Medical University, code A0701.
+- [SNS B-SPINE](https://snsbschool.in/): autonomous experiential business school.
+- [Dr. SNS College of Education](https://drsnsce.edu.in/): B.Ed programmes.
+
+## Programmes (K-12 to PhD)
+- Engineering and technology (SNS College of Technology): B.E./B.Tech in AI & Data Science, AI & Machine Learning, Data Science, Computer Science and Engineering, CS and Design, CS and Technology, CSE (IoT & Cyber Security incl. Blockchain), Information Technology, Mechanical, Mechanical & Mechatronics (Additive Manufacturing), Mechatronics, Civil, EEE, ECE, Aerospace, Bio-Medical, Food Technology. MBA, MBA in Business Analytics, MCA. Ph.D. in Civil, CSE, ECE, EEE, Mechanical.
+- Arts and science (Dr. SNSRCAS): BCA; B.Sc. Computer Science (Full Stack Web Development), AI & Data Science, Data Analytics, Data Science & Visualization, DevOps & Cloud, Cyber Security, Information Technology, Costume Design & Fashion, Psychology; B.Com (General, Professional Accounting, CA, IT, Digital Marketing & Data Mining); BBA, BBA (CA). MBA, MCA, M.Sc. Computer Science, M.Sc. Mathematics, M.Com, M.Com (CA), M.A. English. Ph.D. in CS, Commerce, IT, Management, Tamil, English, Library Science.
+- Health sciences: B.Pharm, D.Pharm, M.Pharm (Pharmaceutics), Pharm.D; B.Sc. Nursing; BPT; B.Sc. Operation Theatre & Anaesthesia Technology, Cardio Pulmonary Perfusion Care, Cardiac Technology, Physician Assistant, Radiography & Imaging Technology, Dialysis Technology, Optometry.
+- Education: B.Ed in Tamil, English, Mathematics, History, Economics, Commerce, Biological Sciences, Computer Science, Social Science, Physical Science.
+- K-12: SNS Academy (CBSE), Pre-KG to Grade XII.
+
+## Admissions
+- Engineering (SNS College of Technology): TNEA counselling, code 2726.
+- SNS B-SPINE: TANCET, CAT or MAT scores.
+- Health sciences: state counselling.
+- Management quota available. Helpline +91 90036 55855.
+
+## Key pages
+- About: https://main.snsgroups.com/about/
+- Contact: https://main.snsgroups.com/contact/
+- Homepage: https://main.snsgroups.com/
+- Programmes: https://main.snsgroups.com/#programs
+- FAQ: https://main.snsgroups.com/#faq
+- Placements (IIPC): https://iipc.snsgroups.com/
+- Governing Council: https://main.snsgroups.com/governing-council/
+- Mandatory disclosure: https://main.snsgroups.com/mandatory-disclosure/
+- SNS iHub (startup incubation): https://snsihub.ai/
+- Alumni network: https://snsalumni.in/

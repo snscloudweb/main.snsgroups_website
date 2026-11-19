@@ -18,7 +18,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
         rel="stylesheet">
 
     <!-- FontAwesome -->
@@ -85,6 +85,100 @@
 
         .nav-dropdown-content {
             transition: all 0.2s ease;
+        }
+
+        /* WhatsApp OTP Buttons - Matching Bitrix Form */
+        .otp-action-wrapper {
+            margin-top: 8px;
+            margin-bottom: 4px;
+            width: 100%;
+        }
+
+        .btn-wa-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            height: 42px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .btn-wa-send {
+            background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.28);
+        }
+
+        .btn-wa-send:hover:not(:disabled) {
+            background: linear-gradient(135deg, #22bf5b 0%, #178e44 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.38);
+        }
+
+        .btn-wa-send:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            background: #a7f3d0;
+            color: #065f46;
+        }
+
+        .btn-wa-verify {
+            background: #1a1200;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(26, 18, 0, 0.2);
+        }
+
+        .btn-wa-verify:hover:not(:disabled) {
+            background: #332600;
+            transform: translateY(-1px);
+        }
+
+        .btn-wa-verify.verified-state {
+            background: #16a34a !important;
+            color: #ffffff !important;
+            cursor: default !important;
+        }
+
+        .wa-status-badge {
+            margin-top: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.4;
+        }
+
+        .wa-status-badge.show {
+            display: flex;
+        }
+
+        .wa-status-badge.success {
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .wa-status-badge.error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .wa-status-badge.info {
+            background: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fde68a;
         }
     </style>
 </head>
@@ -170,14 +264,279 @@
                                 you.</p>
                         </div-->
 
-                        <!-- Bitrix24 Form Container -->
-                        <div class="w-full min-h-[400px]" id="form-container">
-                            <script data-b24-form="inline/52/2qc8ap" data-skip-moving="true">
-                                    (function (w, d, u) {
-                                        var s = d.createElement('script'); s.async = true; s.src = u + '?' + (Date.now() / 180000 | 0);
-                                        var h = d.getElementsByTagName('script')[0]; h.parentNode.insertBefore(s, h);
-                                    })(window, document, 'https://cdn.bitrix24.com/b11752903/crm/form/loader_52.js');
-                            </script>
+                        <!-- Bitrix24 CRM Form (Form 52) with WhatsApp OTP -->
+                        <div class="b24-form-container w-full min-h-[400px]" id="form-container">
+                            <script data-b24-form="inline/52/2qc8ap" data-b24-form-telemetry-sign="v1:52:site.22160056541325f6e0af17a70b2cc0b2e5b8c805267af8683b364a9594359040" data-skip-moving="true">
+                    (function (w, d, u) {
+                        var s = d.createElement('script'); s.async = true; s.src = u + '?' + (Date.now() / 180000 | 0);
+                        var h = d.getElementsByTagName('script')[0]; h.parentNode.insertBefore(s, h);
+                    })(window, document, 'https://cdn.bitrix24.in/b11752903/crm/form/loader_52.js');
+                </script>
+
+                            <!-- WhatsApp OTP Buttons (Send OTP & Verify OTP) -->
+            <script>
+                (function() {
+                    let isOtpVerified = false;
+                    let countdownTimer = null;
+
+                    function findFormInputs() {
+                        const allInputs = Array.from(document.querySelectorAll('.b24-form-container input:not([type="hidden"]):not([type="submit"]):not([type="button"])'));
+                        let nameInput = null;
+                        let phoneInput = null;
+                        let otpInput = null;
+
+                        allInputs.forEach((input) => {
+                            const parent = input.closest('.b24-form-field') || input.parentElement;
+                            const text = (parent ? parent.textContent : '').toLowerCase();
+                            if (text.includes('name') || (input.name && input.name.toLowerCase().includes('name'))) {
+                                nameInput = input;
+                            } else if (text.includes('phone') || input.type === 'tel') {
+                                phoneInput = input;
+                            } else if (text.includes('otp')) {
+                                otpInput = input;
+                            }
+                        });
+
+                        if (!nameInput && allInputs.length >= 1) nameInput = allInputs[0];
+                        if (!phoneInput && allInputs.length >= 2) phoneInput = allInputs[1];
+                        if (!otpInput && allInputs.length >= 3) otpInput = allInputs[2];
+
+                        return { nameInput, phoneInput, otpInput };
+                    }
+
+                    let confirmationDispatched = false;
+                    async function sendAdmissionConfirmation() {
+                        if (confirmationDispatched) return;
+                        const { nameInput, phoneInput } = findFormInputs();
+                        const applicantName = nameInput && nameInput.value.trim() ? nameInput.value.trim() : 'Applicant';
+                        const rawPhone = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
+                        if (!rawPhone || rawPhone.length < 10) return;
+
+                        confirmationDispatched = true;
+                        try {
+                            await fetch('/api/send-confirmation.php', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    phone: rawPhone,
+                                    name: applicantName
+                                })
+                            });
+                            console.log('[PayPerWA] Dispatched enquiry acknowledgement template (verification_message) for', applicantName);
+                        } catch (err) {
+                            console.error('[PayPerWA] Failed to dispatch confirmation:', err);
+                        }
+                    }
+
+                    // Also listen to Bitrix form submit event
+                    window.addEventListener('b24:form:send:success', () => {
+                        sendAdmissionConfirmation();
+                    });
+
+                    function attachOtpButtons() {
+                        if (document.getElementById('waSendOtpWrapper')) return;
+
+                        const { phoneInput, otpInput } = findFormInputs();
+                        if (!phoneInput || !otpInput) return;
+
+                        const phoneFieldContainer = phoneInput.closest('.b24-form-field') || phoneInput.parentElement;
+                        const otpFieldContainer = otpInput.closest('.b24-form-field') || otpInput.parentElement;
+
+                        // 1. Send OTP Button Container (Directly under Phone field)
+                        const sendWrapper = document.createElement('div');
+                        sendWrapper.id = 'waSendOtpWrapper';
+                        sendWrapper.className = 'otp-action-wrapper';
+                        sendWrapper.innerHTML = `
+                            <button type="button" id="btnSendWaOtp" class="btn-wa-action btn-wa-send">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+                                </svg>
+                                <span>Get OTP on WhatsApp</span>
+                            </button>
+                            <div id="waSendStatus" class="wa-status-badge"></div>
+                        `;
+                        phoneFieldContainer.appendChild(sendWrapper);
+
+                        // 2. Verify OTP Button Container (Directly under OTP field, hidden until OTP sent!)
+                        const verifyWrapper = document.createElement('div');
+                        verifyWrapper.id = 'waVerifyOtpWrapper';
+                        verifyWrapper.className = 'otp-action-wrapper';
+                        verifyWrapper.style.display = 'none';
+                        verifyWrapper.innerHTML = `
+                            <button type="button" id="btnVerifyWaOtp" class="btn-wa-action btn-wa-verify">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>Verify OTP</span>
+                            </button>
+                            <div id="waVerifyStatus" class="wa-status-badge"></div>
+                        `;
+                        otpFieldContainer.appendChild(verifyWrapper);
+
+                        const sendBtn = document.getElementById('btnSendWaOtp');
+                        const sendStatus = document.getElementById('waSendStatus');
+                        const verifyBtn = document.getElementById('btnVerifyWaOtp');
+                        const verifyStatus = document.getElementById('waVerifyStatus');
+
+                        // Send OTP click
+                        sendBtn.addEventListener('click', async () => {
+                            const { phoneInput } = findFormInputs();
+                            const rawPhone = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
+
+                            if (!rawPhone || rawPhone.length < 10) {
+                                sendStatus.className = 'wa-status-badge show error';
+                                sendStatus.innerText = '⚠️ Please enter a valid 10-digit mobile number above.';
+                                if (phoneInput) phoneInput.focus();
+                                return;
+                            }
+
+                            sendBtn.disabled = true;
+                            sendStatus.className = 'wa-status-badge show info';
+                            sendStatus.innerText = 'Sending OTP to WhatsApp (+91 ' + rawPhone.slice(-10) + ')...';
+
+                            try {
+                                const response = await fetch('/api/send-otp.php', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ phone: rawPhone })
+                                });
+                                const result = await response.json();
+
+                                if (result.success) {
+                                    sendStatus.className = 'wa-status-badge show success';
+                                    sendStatus.innerText = `WhatsApp OTP sent to +91 ${rawPhone.slice(-10)}! Enter code below.`;
+                                    
+                                    // Reveal Verify OTP button and focus OTP field
+                                    verifyWrapper.style.display = 'block';
+                                    if (otpInput) {
+                                        otpInput.value = '';
+                                        otpInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        otpInput.focus();
+                                    }
+                                    startCountdown(sendBtn);
+                                } else {
+                                    sendStatus.className = 'wa-status-badge show error';
+                                    sendStatus.innerText = '❌ ' + (result.message || 'Failed to dispatch WhatsApp OTP.');
+                                    sendBtn.disabled = false;
+                                }
+                            } catch (err) {
+                                console.error('OTP Send error:', err);
+                                sendStatus.className = 'wa-status-badge show error';
+                                sendStatus.innerText = '❌ Network error: ' + (err.message || 'Could not reach server.');
+                                sendBtn.disabled = false;
+                            }
+                        });
+
+                        // Verify OTP click
+                        verifyBtn.addEventListener('click', async () => {
+                            const { phoneInput, otpInput } = findFormInputs();
+                            const rawPhone = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '') : '';
+                            const enteredOtp = otpInput ? otpInput.value.trim() : '';
+
+                            if (!enteredOtp) {
+                                verifyStatus.className = 'wa-status-badge show error';
+                                verifyStatus.innerText = '⚠️ Please enter the code received on WhatsApp.';
+                                if (otpInput) otpInput.focus();
+                                return;
+                            }
+
+                            verifyBtn.disabled = true;
+                            verifyStatus.className = 'wa-status-badge show info';
+                            verifyStatus.innerText = 'Verifying code...';
+
+                            try {
+                                const response = await fetch('/api/verify-otp.php', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ phone: rawPhone, otp: enteredOtp })
+                                });
+                                const result = await response.json();
+
+                                if (result.success) {
+                                    isOtpVerified = true;
+                                    // Remove the green success section completely
+                                    verifyStatus.style.display = 'none';
+                                    verifyStatus.className = 'wa-status-badge';
+                                    verifyStatus.innerHTML = '';
+                                    
+                                    // Button with only ONE tick icon in front
+                                    verifyBtn.className = 'btn-wa-action btn-wa-verify verified-state';
+                                    verifyBtn.innerHTML = `
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                        </svg>
+                                        <span>Verified</span>
+                                    `;
+                                    verifyBtn.disabled = true;
+                                    sendBtn.style.display = 'none';
+                                    sendStatus.style.display = 'none';
+                                    if (otpInput) otpInput.readOnly = true;
+                                    if (phoneInput) phoneInput.readOnly = true;
+                                } else {
+                                    verifyBtn.disabled = false;
+                                    verifyStatus.className = 'wa-status-badge show error';
+                                    verifyStatus.innerText = '❌ ' + (result.message || 'Incorrect OTP code. Please check WhatsApp.');
+                                    if (otpInput) otpInput.focus();
+                                }
+                            } catch (err) {
+                                verifyBtn.disabled = false;
+                                verifyStatus.className = 'wa-status-badge show error';
+                                verifyStatus.innerText = '❌ Error verifying OTP code.';
+                            }
+                        });
+
+                        // Intercept Bitrix Submit button
+                        const submitBtn = document.querySelector('.b24-form-container button[type="submit"]') ||
+                                          document.querySelector('.b24-form-btn');
+                        if (submitBtn) {
+                            submitBtn.addEventListener('click', (e) => {
+                                if (!isOtpVerified) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    alert('⚠️ Please verify your mobile number with WhatsApp OTP before submitting.');
+                                    if (otpInput) {
+                                        otpInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        otpInput.focus();
+                                    }
+                                    return false;
+                                }
+                                // Trigger WhatsApp confirmation with applicant's Name
+                                sendAdmissionConfirmation();
+                            }, true);
+                        }
+                    }
+
+                    function startCountdown(btn) {
+                        let sec = 45;
+                        clearInterval(countdownTimer);
+                        countdownTimer = setInterval(() => {
+                            sec--;
+                            if (sec > 0) {
+                                btn.innerHTML = `<span>Resend OTP in ${sec}s</span>`;
+                            } else {
+                                clearInterval(countdownTimer);
+                                btn.disabled = false;
+                                btn.innerHTML = `
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+                                    </svg>
+                                    <span>Resend OTP</span>
+                                `;
+                            }
+                        }, 1000);
+                    }
+
+                    const pollInterval = setInterval(() => {
+                        attachOtpButtons();
+                        if (document.getElementById('waSendOtpWrapper')) {
+                            clearInterval(pollInterval);
+                        }
+                    }, 400);
+
+                    const observer = new MutationObserver(attachOtpButtons);
+                    observer.observe(document.body, { childList: true, subtree: true });
+                })();
+            </script>
                         </div>
 
                         <div class="mt-6 text-center text-xs text-gray-400">
@@ -203,7 +562,7 @@
                 <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-gray-100 aspect-video group cursor-pointer video-wrapper"
                     data-video-id="aTfKtjB22Z8">
                     <div class="landing-block-node-card-video embed-responsive-item g-video-preview w-100 h-100 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                        data-src="//www.youtube.com/embed/aTfKtjB22Z8?autoplay=1&controls=1&loop=1&mute=0&rel=0&start=0&html5=1&v=aTfKtjB22Z8"
+                        data-src="//www.youtube.com/embed/aTfKtjB22Z8?autoplay=1&amp;controls=1&amp;loop=1&amp;mute=0&amp;rel=0&amp;start=0&amp;html5=1&amp;v=aTfKtjB22Z8"
                         data-source="https://www.youtube.com/watch?v=aTfKtjB22Z8"
                         data-preview="https://i.ytimg.com/vi/aTfKtjB22Z8/hqdefault.jpg"
                         style="background-image: url('https://i.ytimg.com/vi/aTfKtjB22Z8/hqdefault.jpg'); min-height: 100%;">
@@ -220,7 +579,7 @@
                 <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-gray-100 aspect-video group cursor-pointer video-wrapper"
                     data-video-id="RqWHRWe9CNQ">
                     <div class="landing-block-node-card-video embed-responsive-item g-video-preview w-100 h-100 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                        data-src="//www.youtube.com/embed/RqWHRWe9CNQ?autoplay=1&controls=1&loop=1&mute=0&rel=0&start=0&html5=1&v=RqWHRWe9CNQ"
+                        data-src="//www.youtube.com/embed/RqWHRWe9CNQ?autoplay=1&amp;controls=1&amp;loop=1&amp;mute=0&amp;rel=0&amp;start=0&amp;html5=1&amp;v=RqWHRWe9CNQ"
                         data-source="https://www.youtube.com/watch?v=RqWHRWe9CNQ"
                         data-preview="https://i.ytimg.com/vi/RqWHRWe9CNQ/hqdefault.jpg"
                         style="background-image: url('https://i.ytimg.com/vi/RqWHRWe9CNQ/hqdefault.jpg'); min-height: 100%;">
@@ -287,8 +646,10 @@
 
     <script>
         function closeBanner() {
-            document.getElementById('announcementBanner').style.display = 'none';
-            document.getElementById('mainNav').style.top = '0';
+            const banner = document.getElementById('announcementBanner');
+            const nav = document.getElementById('mainNav');
+            if (banner) banner.style.display = 'none';
+            if (nav) nav.style.top = '0';
         }
 
         // Mobile Menu Toggle
@@ -303,6 +664,7 @@
         // Scroll Background Effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('mainNav');
+            if (!nav) return;
             const banner = document.getElementById('announcementBanner');
             const scrollThreshold = banner && banner.style.display !== 'none' ? 40 : 10;
 
